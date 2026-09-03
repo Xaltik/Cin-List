@@ -13,6 +13,7 @@ export default function TitleDetailPage() {
   const [commentText, setCommentText] = useState("");
   const [savingScore, setSavingScore] = useState(false);
   const [postingComment, setPostingComment] = useState(false);
+  const [savingStatus, setSavingStatus] = useState(false);
 
   function load() {
     fetch(`/api/titles/${id}`)
@@ -33,6 +34,21 @@ export default function TitleDetailPage() {
       body: JSON.stringify({ score }),
     });
     setSavingScore(false);
+    load();
+  }
+
+  async function setStatus(status) {
+    setSavingStatus(true);
+    if (title.myStatus === status) {
+      await fetch(`/api/titles/${id}/status`, { method: "DELETE" });
+    } else {
+      await fetch(`/api/titles/${id}/status`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status }),
+      });
+    }
+    setSavingStatus(false);
     load();
   }
 
@@ -89,6 +105,23 @@ export default function TitleDetailPage() {
         </div>
 
         {title.synopsis && <p style={{ color: "var(--paper-dim)" }}>{title.synopsis}</p>}
+
+        <div className="status-row">
+          <button
+            className={`status-btn ${title.myStatus === "to_watch" ? "active" : ""}`}
+            disabled={savingStatus}
+            onClick={() => setStatus("to_watch")}
+          >
+            À voir
+          </button>
+          <button
+            className={`status-btn ${title.myStatus === "watched" ? "active" : ""}`}
+            disabled={savingStatus}
+            onClick={() => setStatus("watched")}
+          >
+            Vu
+          </button>
+        </div>
 
         <div className="rating-row">
           <span className="help-text">Ta note :</span>

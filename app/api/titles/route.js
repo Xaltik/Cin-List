@@ -11,6 +11,7 @@ export async function GET() {
       addedBy: { select: { name: true } },
       ratings: { select: { score: true, userId: true } },
       comments: { select: { id: true } },
+      watchStatuses: { where: { userId: session.user.id } },
     },
     orderBy: { createdAt: "desc" },
   });
@@ -30,6 +31,7 @@ export async function GET() {
       avgRating: avg,
       ratingCount: scores.length,
       commentCount: t.comments.length,
+      myStatus: t.watchStatuses[0]?.status ?? null,
     };
   });
 

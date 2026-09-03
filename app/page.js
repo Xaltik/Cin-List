@@ -8,6 +8,7 @@ export default function HomePage() {
   const [titles, setTitles] = useState(null);
   const [tab, setTab] = useState("ranking"); // ranking | recent
   const [typeFilter, setTypeFilter] = useState("all"); // all | movie | series
+  const [statusFilter, setStatusFilter] = useState("all"); // all | to_watch | watched
 
   useEffect(() => {
     fetch("/api/titles")
@@ -28,7 +29,11 @@ export default function HomePage() {
     );
   }
 
-  let filtered = titles.filter((t) => typeFilter === "all" || t.type === typeFilter);
+  let filtered = titles.filter(
+    (t) =>
+      (typeFilter === "all" || t.type === typeFilter) &&
+      (statusFilter === "all" || t.myStatus === statusFilter)
+  );
 
   if (tab === "ranking") {
     filtered = [...filtered].sort((a, b) => {
@@ -66,6 +71,20 @@ export default function HomePage() {
           </button>
           <span style={{ flex: 1 }} />
           <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            style={{
+              background: "transparent",
+              border: "none",
+              color: "var(--paper-dim)",
+              fontSize: 14,
+            }}
+          >
+            <option value="all">Tous statuts</option>
+            <option value="to_watch">À voir</option>
+            <option value="watched">Vu</option>
+          </select>
+          <select
             value={typeFilter}
             onChange={(e) => setTypeFilter(e.target.value)}
             style={{
@@ -95,9 +114,14 @@ export default function HomePage() {
                 {tab === "ranking" ? i + 1 : "•"}
               </div>
               <div className="ticket-body">
-                <a>{t.name}</a>
+                <span className="ticket-title">{t.name}</span>
                 <div className="ticket-meta">
                   <span className="pill">{t.type === "movie" ? "Film" : "Série"}</span>
+                  {t.myStatus && (
+                    <span className={`status-badge ${t.myStatus}`}>
+                      {t.myStatus === "to_watch" ? "À voir" : "Vu"}
+                    </span>
+                  )}
                   {t.year && <span>{t.year}</span>}
                   <span>ajouté par {t.addedByName}</span>
                   <span>

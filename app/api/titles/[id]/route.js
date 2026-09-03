@@ -16,6 +16,7 @@ export async function GET(req, { params }) {
         include: { user: { select: { name: true } } },
         orderBy: { createdAt: "desc" },
       },
+      watchStatuses: { where: { userId: session.user.id } },
     },
   });
 
@@ -28,6 +29,7 @@ export async function GET(req, { params }) {
     ...title,
     avgRating: avg,
     myRating: title.ratings.find((r) => r.userId === session.user.id)?.score ?? null,
+    myStatus: title.watchStatuses[0]?.status ?? null,
   });
 }
 

@@ -228,13 +228,14 @@ h3 {
   color: var(--gold);
 }
 
-.ticket-body a {
+.ticket-title {
+  display: block;
   font-family: var(--font-display);
   font-size: 18px;
   font-weight: 600;
 }
 
-.ticket-body a:hover {
+.ticket:hover .ticket-title {
   color: var(--gold);
 }
 
@@ -379,6 +380,52 @@ h3 {
   border-color: var(--gold);
   color: var(--ink);
   font-weight: 700;
+}
+
+.status-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 16px 0;
+  flex-wrap: wrap;
+}
+
+.status-btn {
+  border: 1px solid var(--hairline);
+  background: var(--surface);
+  color: var(--paper-dim);
+  font-size: 13px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.status-btn:hover {
+  border-color: var(--gold);
+  color: var(--paper);
+}
+
+.status-btn.active {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.status-badge {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  border: 1px solid var(--hairline);
+}
+
+.status-badge.to_watch {
+  color: var(--gold);
+  border-color: var(--gold-dim);
+}
+
+.status-badge.watched {
+  color: var(--paper-dim);
 }
 
 .divider {
