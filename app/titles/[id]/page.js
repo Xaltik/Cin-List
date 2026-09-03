@@ -91,17 +91,29 @@ export default function TitleDetailPage() {
     <>
       <Navbar />
       <div className="container">
-        <div className="detail-head">
-          <span className="pill">{title.type === "movie" ? "Film" : "Série"}</span>
-          <h1 style={{ marginTop: 10 }}>
-            {title.name} {title.year && <span style={{ color: "var(--paper-dim)" }}>({title.year})</span>}
-          </h1>
-          <p className="help-text" style={{ marginTop: 8 }}>
-            Ajouté par {title.addedBy.name}
-            {title.avgRating !== null && (
-              <> · note moyenne <strong style={{ color: "var(--gold)" }}>{title.avgRating.toFixed(1)}/10</strong></>
-            )}
-          </p>
+        <div className="detail-head" style={{ display: "flex", gap: 20 }}>
+          {title.posterUrl && (
+            <img
+              src={title.posterUrl}
+              alt=""
+              className="poster-thumb"
+              onError={(e) => {
+                e.currentTarget.style.display = "none";
+              }}
+            />
+          )}
+          <div>
+            <span className="pill">{title.type === "movie" ? "Film" : "Série"}</span>
+            <h1 style={{ marginTop: 10 }}>
+              {title.name} {title.year && <span style={{ color: "var(--paper-dim)" }}>({title.year})</span>}
+            </h1>
+            <p className="help-text" style={{ marginTop: 8 }}>
+              Ajouté par {title.addedBy.name}
+              {title.avgRating !== null && (
+                <> · note moyenne <strong style={{ color: "var(--gold)" }}>{title.avgRating.toFixed(1)}/10</strong></>
+              )}
+            </p>
+          </div>
         </div>
 
         {title.synopsis && <p style={{ color: "var(--paper-dim)" }}>{title.synopsis}</p>}

@@ -39,12 +39,15 @@ d'invitation, puis partage le lien + le code à tes amis pour qu'ils fassent par
 ## Fonctionnement
 
 - **Comptes** : chacun crée son compte avec le code d'invitation (pas d'inscription publique ouverte).
-- **Ajouter un titre** : nom, type (film/série), année, résumé, affiche (lien d'image optionnel).
+- **Ajouter un titre** : tape juste le nom — si `TMDB_API_KEY` est configurée, des suggestions
+  TMDb apparaissent (affiche, année, résumé pré-remplis, éditables ensuite). Sinon saisie manuelle.
+- **Statut "à voir" / "vu"** : indépendant de la notation, propre à chaque personne. Filtrable
+  depuis la page d'accueil.
 - **Noter** : chacun donne sa propre note de 1 à 10 à chaque titre. La note affichée sur la
   page d'accueil est la moyenne de toutes les notes du groupe.
 - **Commenter** : chaque titre a un fil de commentaires.
 - **Classement** : la page d'accueil trie automatiquement par note moyenne (onglet "Classement")
-  ou par date d'ajout (onglet "Récents"), avec un filtre Film/Série.
+  ou par date d'ajout (onglet "Récents"), avec des filtres Film/Série et Statut.
 - Seule la personne qui a ajouté un titre peut le supprimer.
 
 ## Déployé en ligne
@@ -54,7 +57,8 @@ connectée au repo GitHub (chaque push sur `main` redéploie automatiquement) et
 **Neon Postgres** provisionnée via l'intégration marketplace Vercel.
 
 Variables d'environnement configurées sur Vercel (Production) : `DATABASE_URL` (+ variantes
-Neon, injectées automatiquement), `NEXTAUTH_SECRET`, `NEXTAUTH_URL`, `INVITE_CODE`.
+Neon, injectées automatiquement), `NEXTAUTH_SECRET`, `NEXTAUTH_URL`, `INVITE_CODE`,
+`TMDB_API_KEY` (optionnelle — voir `.env.example`).
 
 Pour redéployer manuellement ou gérer les variables :
 
@@ -66,10 +70,10 @@ npx vercel env add NOM production   # ajouter/modifier une variable
 
 ## Idées d'évolutions possibles
 
-- Récupérer automatiquement affiche/résumé via l'API [TMDb](https://www.themoviedb.org/documentation/api) (gratuite) au lieu de les saisir à la main
 - Notifications quand un ami ajoute ou note un titre
-- Système de "à voir" / "vu" par personne
 - Commentaires avec spoilers cachables
+- Modifier un titre après ajout, supprimer/éditer son propre commentaire
+- Récupération de mot de passe
 
 ## Stack technique
 

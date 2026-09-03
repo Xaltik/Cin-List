@@ -320,6 +320,74 @@ h3 {
   min-height: 80px;
 }
 
+.tmdb-suggestions {
+  position: absolute;
+  z-index: 10;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: 4px;
+  background: var(--surface-raised);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.tmdb-suggestion {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--hairline);
+  color: var(--paper);
+  text-align: left;
+  cursor: pointer;
+}
+
+.tmdb-suggestion:last-child {
+  border-bottom: none;
+}
+
+.tmdb-suggestion:hover {
+  background: var(--surface);
+}
+
+.tmdb-suggestion img,
+.tmdb-suggestion-noposter {
+  width: 32px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 2px;
+  flex-shrink: 0;
+  background: var(--surface);
+}
+
+.tmdb-suggestion-name {
+  font-size: 14px;
+}
+
+.poster-preview {
+  width: 60px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: var(--radius);
+  border: 1px solid var(--hairline);
+  flex-shrink: 0;
+}
+
+.poster-thumb {
+  width: 120px;
+  height: 180px;
+  object-fit: cover;
+  border-radius: var(--radius);
+  border: 1px solid var(--hairline);
+  flex-shrink: 0;
+}
+
 .auth-shell {
   max-width: 380px;
   margin: 90px auto;
