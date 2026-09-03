@@ -3,30 +3,35 @@
 Une petite appli pour toi et tes amis : ajoutez des films/séries, notez-les de 1 à 10,
 commentez, et suivez le classement du groupe.
 
+**🎬 App en ligne : [cinelist-lac.vercel.app](https://cinelist-lac.vercel.app)**
+
 ## Démarrage en local
 
 Il te faut [Node.js](https://nodejs.org) (version 18 ou plus) installé.
+
+La base de données de prod est un Postgres hébergé sur [Neon](https://neon.tech), connecté au
+projet Vercel. Pour développer en local avec cette même base :
 
 ```bash
 # 1. Installer les dépendances
 npm install
 
-# 2. Copier le fichier d'environnement et le remplir
-cp .env.example .env
+# 2. Récupérer les variables d'environnement du projet Vercel (nécessite `npx vercel link` une
+# première fois si ce n'est pas déjà fait)
+npx vercel env pull .env.local
 ```
 
-Ouvre `.env` et modifie :
-- `NEXTAUTH_SECRET` : génère une valeur avec `openssl rand -base64 32`
-- `INVITE_CODE` : le code que tu donneras à tes amis pour qu'ils puissent créer un compte
-  (ça empêche n'importe qui de s'inscrire si l'appli est en ligne)
+Ça remplit `.env.local` avec `DATABASE_URL` (Neon), `NEXTAUTH_SECRET` et `INVITE_CODE`. Ajoute-y
+aussi `NEXTAUTH_URL="http://localhost:3000"` pour le local.
 
 ```bash
-# 3. Créer la base de données SQLite
-npm run db:push
-
-# 4. Lancer l'appli
+# 3. Lancer l'appli
 npm run dev
 ```
+
+Si tu préfères une base SQLite locale indépendante (sans toucher à la prod), remets
+`provider = "sqlite"` dans `prisma/schema.prisma`, copie `.env.example` en `.env` et lance
+`npm run db:push`.
 
 Ouvre http://localhost:3000, clique sur "S'inscrire", crée ton compte avec le code
 d'invitation, puis partage le lien + le code à tes amis pour qu'ils fassent pareil.
@@ -42,23 +47,22 @@ d'invitation, puis partage le lien + le code à tes amis pour qu'ils fassent par
   ou par date d'ajout (onglet "Récents"), avec un filtre Film/Série.
 - Seule la personne qui a ajouté un titre peut le supprimer.
 
-## Déployer en ligne (pour que tout le monde y accède sans que ton PC soit allumé)
+## Déployé en ligne
 
-Le plus simple est **Vercel** (gratuit pour ce genre de projet) :
+L'appli tourne sur **Vercel** : [cinelist-lac.vercel.app](https://cinelist-lac.vercel.app),
+connectée au repo GitHub (chaque push sur `main` redéploie automatiquement) et à une base
+**Neon Postgres** provisionnée via l'intégration marketplace Vercel.
 
-1. Crée un repo GitHub avec ce code (`git init`, `git add .`, `git commit`, push).
-2. Va sur [vercel.com](https://vercel.com), importe le repo.
-3. Comme SQLite ne fonctionne pas bien sur Vercel (système de fichiers non persistant),
-   remplace la base par une base hébergée gratuite compatible Prisma, par exemple
-   [Turso](https://turso.tech) ou [Neon](https://neon.tech) (Postgres) — il suffit de
-   changer `provider` dans `prisma/schema.prisma` et l'URL dans les variables d'environnement
-   Vercel.
-4. Ajoute dans les variables d'environnement Vercel : `DATABASE_URL`, `NEXTAUTH_SECRET`,
-   `NEXTAUTH_URL` (l'URL Vercel de ton app), `INVITE_CODE`.
+Variables d'environnement configurées sur Vercel (Production) : `DATABASE_URL` (+ variantes
+Neon, injectées automatiquement), `NEXTAUTH_SECRET`, `NEXTAUTH_URL`, `INVITE_CODE`.
 
-Si tu préfères rester 100% simple sans toucher au code, tu peux aussi héberger l'appli
-telle quelle (avec SQLite) sur une petite VM (Railway, Render, Fly.io) qui garde un disque
-persistant — demande-moi et je t'accompagne quand tu seras prêt à déployer.
+Pour redéployer manuellement ou gérer les variables :
+
+```bash
+npx vercel --prod          # déployer
+npx vercel env ls          # lister les variables d'env
+npx vercel env add NOM production   # ajouter/modifier une variable
+```
 
 ## Idées d'évolutions possibles
 
@@ -69,4 +73,5 @@ persistant — demande-moi et je t'accompagne quand tu seras prêt à déployer.
 
 ## Stack technique
 
-Next.js 14 (App Router) · SQLite + Prisma · NextAuth (comptes email/mot de passe)
+Next.js 14 (App Router) · Postgres (Neon) + Prisma · NextAuth (comptes email/mot de passe) ·
+déployé sur Vercel
