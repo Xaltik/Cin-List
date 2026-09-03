@@ -3,11 +3,12 @@ import { authOptions } from "../../../../lib/auth";
 import { prisma } from "../../../../lib/prisma";
 
 export async function GET(req, { params }) {
+  const { id } = await params;
   const session = await getServerSession(authOptions);
   if (!session) return Response.json({ error: "Non authentifié." }, { status: 401 });
 
   const title = await prisma.title.findUnique({
-    where: { id: params.id },
+    where: { id },
     include: {
       addedBy: { select: { name: true } },
       ratings: { include: { user: { select: { id: true, name: true } } } },
@@ -31,15 +32,16 @@ export async function GET(req, { params }) {
 }
 
 export async function DELETE(req, { params }) {
+  const { id } = await params;
   const session = await getServerSession(authOptions);
   if (!session) return Response.json({ error: "Non authentifié." }, { status: 401 });
 
-  const title = await prisma.title.findUnique({ where: { id: params.id } });
+  const title = await prisma.title.findUnique({ where: { id } });
   if (!title) return Response.json({ error: "Introuvable." }, { status: 404 });
   if (title.addedById !== session.user.id) {
     return Response.json({ error: "Seul l'ajouteur peut supprimer ce titre." }, { status: 403 });
   }
 
-  await prisma.title.delete({ where: { id: params.id } });
+  await prisma.title.delete({ where: { id } });
   return Response.json({ ok: true });
 }
